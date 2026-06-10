@@ -1,0 +1,130 @@
+body {
+    background: #f6f8fb;
+}
+
+#main {
+    background: #f6f8fb;
+}
+
+.page-heading h3 {
+    font-weight: 800;
+    color: #1f2d5a;
+}
+
+.card {
+    border: none !important;
+    border-radius: 18px !important;
+    box-shadow: 0 8px 24px rgba(31, 45, 90, 0.06) !important;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.table {
+    border-color: #eef1f6 !important;
+}
+
+.table thead th {
+    background: #f8fafc;
+    color: #667085;
+    font-size: 13px;
+    font-weight: 700;
+    border-bottom: 1px solid #eef1f6 !important;
+}
+
+.table tbody td {
+    color: #475467;
+    vertical-align: middle;
+    border-color: #eef1f6 !important;
+}
+
+.table-hover tbody tr:hover {
+    background: #f9fbff;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    border: 1px solid #dfe5ef;
+    padding: 0.65rem 0.9rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #435ebe;
+    box-shadow: 0 0 0 0.15rem rgba(67, 94, 190, 0.15);
+}
+
+.btn {
+    border-radius: 12px;
+    font-weight: 700;
+    padding: 0.55rem 0.9rem;
+}
+
+.btn-sm {
+    border-radius: 10px;
+    padding: 0.4rem 0.7rem;
+}
+
+.btn-primary {
+    background: #435ebe;
+    border-color: #435ebe;
+}
+
+.btn-primary:hover {
+    background: #344ca3;
+    border-color: #344ca3;
+}
+
+.btn-success {
+    background: #198754;
+    border-color: #198754;
+}
+
+.btn-danger {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+
+.alert {
+    border: none;
+    border-radius: 14px;
+}
+
+.badge {
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+}
+
+.sidebar-wrapper {
+    box-shadow: 6px 0 24px rgba(31, 45, 90, 0.06);
+}
+
+.sidebar-wrapper .menu .sidebar-item.active > .sidebar-link {
+    border-radius: 14px;
+}
+
+.sidebar-wrapper .menu .sidebar-link {
+    border-radius: 14px;
+    margin-bottom: 4px;
+}
+
+.page-content {
+    padding-bottom: 2rem;
+}
+
+.sidebar-logout .sidebar-link {
+    color: #7c8595 !important;
+    transition: all 0.2s ease;
+}
+
+.sidebar-logout .sidebar-link:hover {
+    background: #dc3545 !important;
+    color: #fff1f2 !important;
+}
+
+.sidebar-logout .sidebar-link:hover i,
+.sidebar-logout .sidebar-link:hover span {
+    color: #fff1f2 !important;
+}

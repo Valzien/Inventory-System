@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('barangs', function (Blueprint $table) {
-            if (Schema::hasColumn('barangs', 'kode_barang')) {
-                $table->renameColumn('kode_barang', 'part_number');
+            if (Schema::hasColumn('barangs', 'part_number')) {
+                $table->renameColumn('part_number', 'part_number');
             }
         });
 
         Schema::table('transaksis', function (Blueprint $table) {
-            if (Schema::hasColumn('transaksis', 'kode_transaksi')) {
-                $table->renameColumn('kode_transaksi', 'po_number');
+            if (Schema::hasColumn('transaksis', 'po_number')) {
+                $table->renameColumn('po_number', 'po_number');
             }
         });
     }
@@ -25,13 +25,13 @@ return new class extends Migration
     {
         Schema::table('barangs', function (Blueprint $table) {
             if (Schema::hasColumn('barangs', 'part_number')) {
-                $table->renameColumn('part_number', 'kode_barang');
+                $table->renameColumn('part_number', 'part_number');
             }
         });
 
         Schema::table('transaksis', function (Blueprint $table) {
             if (Schema::hasColumn('transaksis', 'po_number')) {
-                $table->renameColumn('po_number', 'kode_transaksi');
+                $table->renameColumn('po_number', 'po_number');
             }
         });
     }

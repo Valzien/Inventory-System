@@ -11,7 +11,10 @@ class TransaksiController extends Controller
 {
     public function index()
     {
-        $transaksi = Transaksi::with('barang')->latest()->get();
+        $transaksi = Transaksi::with(['barang', 'approval'])
+            ->latest()
+            ->get();
+
         return view('transaksi.index', compact('transaksi'));
     }
 
@@ -23,23 +26,15 @@ class TransaksiController extends Controller
 
     public function store(Request $request)
     {
-        $barang = Barang::findOrFail($request->barang_id);
-
-        if ($request->jenis == 'keluar') {
-            if ($barang->stok < $request->jumlah) {
-                return redirect()->back()
-                    ->with('error', 'Stok tidak mencukupi');
-            }
-
-            $barang->stok -= $request->jumlah;
-        } else {
-            $barang->stok += $request->jumlah;
-        }
-
-        $barang->save();
+        $request->validate([
+            'barang_id' => 'required|exists:barangs,id',
+            'jenis' => 'required|in:masuk,keluar',
+            'jumlah' => 'required|numeric|min:1',
+            'keterangan' => 'nullable'
+        ]);
 
         Transaksi::create([
-            'po_number' => 'TRX-' . strtoupper(Str::random(6)),
+            'po_number' => 'PO-' . now()->format('YmdHis'),
             'barang_id' => $request->barang_id,
             'jenis' => $request->jenis,
             'jumlah' => $request->jumlah,
@@ -48,6 +43,6 @@ class TransaksiController extends Controller
         ]);
 
         return redirect('/transaksi')
-            ->with('success', 'Transaksi berhasil disimpan');
+            ->with('success', 'Transaksi berhasil dibuat dan menunggu approval');
     }
 }

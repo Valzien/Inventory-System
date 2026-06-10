@@ -36,7 +36,7 @@ class LaporanExport implements FromCollection, WithHeadings, WithStyles, ShouldA
     public function headings(): array
     {
         return [
-            'Kode Transaksi',
+            'PO Number',
             'Nama Barang',
             'Jenis',
             'Jumlah',

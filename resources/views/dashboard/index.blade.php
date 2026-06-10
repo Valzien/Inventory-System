@@ -237,7 +237,8 @@
                     <table class="table table-hover align-middle">
                         <thead>
                             <tr>
-                                <th>Barang</th>
+                                <th>Part</th>
+                                <th>Kategori</th>
                                 <th>Stok</th>
                             </tr>
                         </thead>
@@ -245,7 +246,17 @@
                         <tbody>
                             @foreach($stokMenipis as $item)
                             <tr>
-                                <td>{{ $item->nama_barang }}</td>
+                                <td>
+                                    <strong>{{ $item->part_number }}</strong><br>
+                                    <small class="text-muted">{{ $item->nama_barang }}</small>
+                                </td>
+
+                                <td>
+                                    <small class="text-muted">
+                                        {{ $item->kategoriPart->nama_kategori ?? '-' }}
+                                    </small>
+                                </td>
+
                                 <td>
                                     <span class="badge-soft-danger">
                                         {{ $item->stok }}
@@ -284,9 +295,9 @@
                 <table class="table table-hover align-middle">
                     <thead>
                         <tr>
-                            <th>Kode</th>
+                            <th>Part_Number</th>
                             <th>Barang</th>
-                            <th>Jenis</th>
+                            <th>Kategori</th>
                             <th>Jumlah</th>
                         </tr>
                     </thead>
@@ -295,10 +306,9 @@
                         @forelse($transaksiTerbaru as $trx)
                         <tr>
                             <td>
-                                <strong>{{ $trx->po_number }}</strong>
+                                <strong>{{ $trx->barang->part_number }}</strong><br>
+                                <small class="text-muted">{{ $trx->barang->nama_barang }}</small>
                             </td>
-
-                            <td>{{ $trx->barang->nama_barang }}</td>
 
                             <td>
                                 @if($trx->jenis == 'masuk')
@@ -316,7 +326,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center text-muted">
+                            <td colspan="3" class="text-center text-muted">
                                 Belum ada transaksi
                             </td>
                         </tr>

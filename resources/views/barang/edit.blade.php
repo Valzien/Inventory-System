@@ -32,23 +32,93 @@
             </div>
 
             <div class="mb-3">
-                <label>Stok</label>
+                <label>Kategori Part</label>
+
+                <select
+                    name="kategori_part_id"
+                    class="form-control"
+                    required
+                >
+
+                    @foreach($kategori as $item)
+
+                        <option
+                            value="{{ $item->id }}"
+                            {{ $barang->kategori_part_id == $item->id ? 'selected' : '' }}
+                        >
+                            {{ $item->nama_kategori }}
+                        </option>
+
+                    @endforeach
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Stok Saat Ini</label>
                 <input
                     type="number"
-                    name="stok"
                     class="form-control"
                     value="{{ $barang->stok }}"
+                    readonly
                 >
+                <small class="text-muted">
+                    Stok tidak dapat diubah dari master data. Gunakan transaksi masuk atau keluar.
+                </small>
             </div>
 
             <div class="mb-3">
                 <label>Supplier</label>
-                <input
-                    type="text"
-                    name="satuan"
-                    class="form-control"
-                    value="{{ $barang->satuan }}"
-                >
+                <select name="supplier_id" class="form-control" required>
+                    <option value="">Pilih Supplier</option>
+
+                    @foreach($suppliers as $supplier)
+                        <option
+                            value="{{ $supplier->id }}"
+                            {{ $barang->supplier_id == $supplier->id ? 'selected' : '' }}
+                        >
+                            {{ $supplier->nama_supplier }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Satuan</label>
+
+                <select name="satuan" class="form-control" required>
+
+                    <option value="PCS"
+                        {{ $barang->satuan == 'PCS' ? 'selected' : '' }}>
+                        PCS
+                    </option>
+
+                    <option value="UNIT"
+                        {{ $barang->satuan == 'UNIT' ? 'selected' : '' }}>
+                        UNIT
+                    </option>
+
+                    <option value="BOX"
+                        {{ $barang->satuan == 'BOX' ? 'selected' : '' }}>
+                        BOX
+                    </option>
+
+                    <option value="SET"
+                        {{ $barang->satuan == 'SET' ? 'selected' : '' }}>
+                        SET
+                    </option>
+
+                    <option value="ROLL"
+                        {{ $barang->satuan == 'ROLL' ? 'selected' : '' }}>
+                        ROLL
+                    </option>
+
+                    <option value="METER"
+                        {{ $barang->satuan == 'METER' ? 'selected' : '' }}>
+                        METER
+                    </option>
+
+                </select>
             </div>
 
             <button class="btn btn-success">

@@ -18,7 +18,7 @@
             >
 
             <div class="mb-3">
-                <label>Kode Transaksi</label>
+                <label>PO Number</label>
                 <input
                     type="text"
                     class="form-control"

@@ -31,10 +31,12 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Kode</th>
+                    <th>Part Number</th>
                     <th>Nama Barang</th>
+                    <th>Kategori Part</th>
                     <th>Stok</th>
                     <th>Supplier</th>
+                    <th>Satuan</th>
                     <th width="200">Aksi</th>
                 </tr>
             </thead>
@@ -44,7 +46,9 @@
                 <tr>
                     <td>{{ $item->part_number }}</td>
                     <td>{{ $item->nama_barang }}</td>
+                    <td>{{ $item->kategoriPart->nama_kategori }}</td>
                     <td>{{ $item->stok }}</td>
+                    <td>{{ $item->supplier->nama_supplier ?? '-' }}</td>
                     <td>{{ $item->satuan }}</td>
                     <td>
                         <a href="/barang/{{ $item->id }}/edit"
