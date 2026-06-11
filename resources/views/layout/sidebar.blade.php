@@ -79,8 +79,20 @@
 
                 @endif
 
-                {{-- LOGOUT --}}
-                <li class="sidebar-item mt-4 sidebar-logout">
+                {{-- ACCOUNT MENU --}}
+                <li class="sidebar-title mt-4">
+                    Akun
+                </li>
+
+                <li class="sidebar-item {{ request()->is('profile*') ? 'active' : '' }}">
+                    <a href="/profile" class="sidebar-link">
+                        <i class="bi bi-person-circle"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item sidebar-logout">
+
                     <form action="/logout" method="POST">
                         @csrf
 
@@ -92,6 +104,7 @@
                             <span>Logout</span>
                         </button>
                     </form>
+
                 </li>
 
             </ul>

@@ -10,6 +10,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriPartController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,11 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::middleware('auth')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index']);
+
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::post('/profile/update', [ProfileController::class, 'update']);
+
+    Route::post('/profile/password', [ProfileController::class, 'changePassword']);
 
     // Data Part
     Route::get('/barang', [BarangController::class, 'index']);

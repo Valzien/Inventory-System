@@ -292,48 +292,53 @@
             </div>
 
             <div class="card-body p-4">
-                <table class="table table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th>Part_Number</th>
-                            <th>Barang</th>
-                            <th>Kategori</th>
-                            <th>Jumlah</th>
-                        </tr>
-                    </thead>
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>PO Number</th>
+                        <th>Part</th>
+                        <th>Jenis</th>
+                        <th>Jumlah</th>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                        @forelse($transaksiTerbaru as $trx)
-                        <tr>
-                            <td>
-                                <strong>{{ $trx->barang->part_number }}</strong><br>
-                                <small class="text-muted">{{ $trx->barang->nama_barang }}</small>
-                            </td>
+                <tbody>
+                    @forelse($transaksiTerbaru as $trx)
+                    <tr>
+                        <td>
+                            <strong>{{ $trx->po_number }}</strong>
+                        </td>
 
-                            <td>
-                                @if($trx->jenis == 'masuk')
-                                    <span class="badge-soft-success">
-                                        Masuk
-                                    </span>
-                                @else
-                                    <span class="badge-soft-danger">
-                                        Keluar
-                                    </span>
-                                @endif
-                            </td>
+                        <td>
+                            <strong>{{ $trx->barang->part_number }}</strong><br>
+                            <small class="text-muted">
+                                {{ $trx->barang->nama_barang }}
+                            </small>
+                        </td>
 
-                            <td>{{ $trx->jumlah }}</td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="3" class="text-center text-muted">
-                                Belum ada transaksi
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
+                        <td>
+                            @if($trx->jenis == 'masuk')
+                                <span class="badge-soft-success">
+                                    Masuk
+                                </span>
+                            @else
+                                <span class="badge-soft-danger">
+                                    Keluar
+                                </span>
+                            @endif
+                        </td>
 
-                </table>
+                        <td>{{ $trx->jumlah }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">
+                            Belum ada transaksi
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
             </div>
         </div>
     </div>
