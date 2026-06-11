@@ -1,86 +1,151 @@
-{{-- resources/views/laporan/index.blade.php --}}
-
 @extends('layout.app')
 
 @section('content')
-<div class="page-heading">
-    <h3>Laporan Transaksi</h3>
+
+<div class="page-heading mb-4">
+    <h3 class="fw-bold mb-1">Laporan Transaksi</h3>
+    <p class="text-muted mb-0">
+        Rekap transaksi inventory part pesawat berdasarkan periode tertentu.
+    </p>
 </div>
 
-<div class="card">
-    <div class="card-body">
+<form method="GET" action="/laporan">
 
-        {{-- FILTER --}}
-        <form method="GET" action="/laporan" class="mb-4">
-            <div class="row">
+    <div class="row g-3 mb-3">
 
-                <div class="col-md-4">
-                    <label>Tanggal Awal</label>
-                    <input
-                        type="date"
-                        name="tanggal_awal"
-                        class="form-control"
-                        value="{{ request('tanggal_awal') }}"
-                    >
-                </div>
+        <div class="col-md-12">
+            <label class="form-label">Pencarian</label>
 
-                <div class="col-md-4">
-                    <label>Tanggal Akhir</label>
-                    <input
-                        type="date"
-                        name="tanggal_akhir"
-                        class="form-control"
-                        value="{{ request('tanggal_akhir') }}"
-                    >
-                </div>
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Cari PO Number, Part Number atau Nama Part..."
+                value="{{ request('search') }}"
+            >
+        </div>
 
-                <div class="col-md-4 d-flex align-items-end">
-                    <button class="btn btn-primary w-100">
-                        Filter Laporan
-                    </button>
-                </div>
+        <div class="col-md-4">
+            <label class="form-label">Tanggal Awal</label>
+            <input
+                type="date"
+                name="tanggal_awal"
+                class="form-control"
+                value="{{ request('tanggal_awal') }}"
+            >
+        </div>
 
-            </div>
-        </form>
+        <div class="col-md-4">
+            <label class="form-label">Tanggal Akhir</label>
+            <input
+                type="date"
+                name="tanggal_akhir"
+                class="form-control"
+                value="{{ request('tanggal_akhir') }}"
+            >
+        </div>
 
-        {{-- BUTTON EXPORT --}}
-        <div class="mb-3">
+        <div class="col-md-4 d-flex align-items-end">
+            <button class="btn btn-primary w-100">
+                Filter & Cari
+            </button>
+        </div>
+
+    </div>
+
+</form>
+
+        {{-- EXPORT BUTTON --}}
+        <div class="d-flex gap-2 mb-4">
             <a
                 href="/laporan/pdf?tanggal_awal={{ request('tanggal_awal') }}&tanggal_akhir={{ request('tanggal_akhir') }}"
                 class="btn btn-danger"
             >
-                Download PDF
+                Export PDF
             </a>
 
             <a
-                href="/laporan/excel"
-                class="btn btn-success"
+            href="/laporan/pdf?search={{ request('search') }}&tanggal_awal={{ request('tanggal_awal') }}&tanggal_akhir={{ request('tanggal_akhir') }}"
+            class="btn btn-danger"
             >
-                Download Excel
+                Export PDF
             </a>
+
+            <a
+                href="/laporan"
+                class="btn btn-light"
+            >
+                Reset Filter
+            </a>
+        </div>
+
+        {{-- SUMMARY --}}
+        <div class="row mb-4">
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm mb-0">
+                    <div class="card-body">
+                        <small class="text-muted">Total Data</small>
+                        <h4 class="fw-bold mb-0">
+                            {{ $laporan->count() }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm mb-0">
+                    <div class="card-body">
+                        <small class="text-muted">Barang Masuk</small>
+                        <h4 class="fw-bold text-success mb-0">
+                            {{ $laporan->where('jenis', 'masuk')->count() }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm mb-0">
+                    <div class="card-body">
+                        <small class="text-muted">Barang Keluar</small>
+                        <h4 class="fw-bold text-danger mb-0">
+                            {{ $laporan->where('jenis', 'keluar')->count() }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         {{-- TABLE --}}
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>Kode</th>
-                        <th>Barang</th>
+                        <th>PO Number</th>
+                        <th>Part</th>
                         <th>Jenis</th>
                         <th>Jumlah</th>
                         <th>Tanggal</th>
                         <th>Dokumen</th>
-                        <th>Status Approval</th>
+                        <th>Status</th>
+                        <th>Approved By</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach($laporan as $item)
+                    @forelse($laporan as $item)
                     <tr>
-                        <td>{{ $item->po_number }}</td>
+                        <td>
+                            <strong>{{ $item->po_number }}</strong>
+                        </td>
 
-                        <td>{{ $item->barang->part_number }} - {{ $item->barang->nama_barang }}</td>
+                        <td>
+                            <strong>{{ $item->barang->part_number ?? '-' }}</strong><br>
+                            <small class="text-muted">
+                                {{ $item->barang->nama_barang ?? '-' }}
+                            </small>
+                        </td>
 
                         <td>
                             @if($item->jenis == 'masuk')
@@ -98,7 +163,6 @@
 
                         <td>{{ $item->tanggal }}</td>
 
-                        {{-- DOKUMEN --}}
                         <td>
                             @if($item->dokumen->count() > 0)
 
@@ -115,7 +179,6 @@
                                             {{ $doc->jenis_dokumen }}
                                         </option>
                                     @endforeach
-
                                 </select>
 
                             @else
@@ -125,7 +188,6 @@
                             @endif
                         </td>
 
-                        {{-- STATUS APPROVAL --}}
                         <td>
                             @if($item->approval)
 
@@ -133,12 +195,10 @@
                                     <span class="badge bg-success">
                                         Approved
                                     </span>
-
                                 @elseif($item->approval->status == 'rejected')
                                     <span class="badge bg-danger">
                                         Rejected
                                     </span>
-
                                 @else
                                     <span class="badge bg-warning text-dark">
                                         Pending
@@ -152,12 +212,30 @@
                             @endif
                         </td>
 
+                        <td>
+                            {{ $item->approval->user->name ?? '-' }}
+
+                            @if($item->approval && $item->approval->approved_at)
+                                <br>
+                                <small class="text-muted">
+                                    {{ \Carbon\Carbon::parse($item->approval->approved_at)->format('d M Y H:i') }}
+                                </small>
+                            @endif
+                        </td>
                     </tr>
-                    @endforeach
+
+                    @empty
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">
+                            Tidak ada data laporan
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
 
     </div>
 </div>
+
 @endsection

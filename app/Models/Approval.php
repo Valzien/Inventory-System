@@ -8,12 +8,14 @@ class Approval extends Model
 {
     protected $fillable = [
         'transaksi_id',
+        'approved_by',
         'status',
-        'catatan'
+        'catatan',
+        'approved_at'
     ];
 
-    public function transaksi()
+    public function user()
     {
-        return $this->belongsTo(Transaksi::class);
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }

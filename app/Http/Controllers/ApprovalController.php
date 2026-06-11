@@ -8,18 +8,37 @@ use App\Models\Transaksi;
 
 class ApprovalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transaksi = Transaksi::with('barang', 'dokumen', 'approval')
-            ->latest()
-            ->get();
+        $search = $request->search;
 
-        return view('approval.index', compact('transaksi'));
+        $transaksi = Transaksi::with(
+            'barang',
+            'dokumen',
+            'approval.user'
+        )
+        ->when($search, function ($query) use ($search) {
+
+            $query->where('po_number', 'like', "%{$search}%")
+
+                ->orWhereHas('barang', function ($q) use ($search) {
+                    $q->where('part_number', 'like', "%{$search}%")
+                    ->orWhere('nama_barang', 'like', "%{$search}%");
+                });
+        })
+        ->latest()
+        ->get();
+
+        return view(
+            'approval.index',
+            compact('transaksi', 'search')
+        );
     }
 
     public function approve($id)
     {
-        $transaksi = Transaksi::with('barang', 'dokumen')->findOrFail($id);
+        $transaksi = Transaksi::with('barang', 'dokumen', 'approval')
+            ->findOrFail($id);
 
         if ($transaksi->dokumen->count() == 0) {
             return redirect('/approval')
@@ -51,8 +70,10 @@ class ApprovalController extends Controller
         Approval::updateOrCreate(
             ['transaksi_id' => $transaksi->id],
             [
+                'approved_by' => auth()->id(),
                 'status' => 'approved',
-                'catatan' => null
+                'catatan' => null,
+                'approved_at' => now()
             ]
         );
 
@@ -69,8 +90,10 @@ class ApprovalController extends Controller
         Approval::updateOrCreate(
             ['transaksi_id' => $id],
             [
+                'approved_by' => auth()->id(),
                 'status' => 'rejected',
-                'catatan' => $request->catatan
+                'catatan' => $request->catatan,
+                'approved_at' => now()
             ]
         );
 

@@ -149,54 +149,100 @@
 </style>
 
 <div class="page-heading mb-4">
-    <h3 class="dashboard-title mb-1">Dashboard Inventory</h3>
+    <h3 class="dashboard-title mb-1">    Selamat Datang, {{ auth()->user()->name }}</h3>
     <p class="dashboard-subtitle mb-0">
-        Ringkasan aktivitas inventory PT. Iklima Sukses Mandiri
+        Dashboard aktivitas inventory PT. Iklima Sukses Mandiri
     </p>
 </div>
 
 {{-- CARD STATISTIK --}}
 <div class="row g-4">
 
-    <div class="col-md-3">
-        <div class="card stat-card primary">
-            <div class="card-body p-4">
-                <div class="stat-title">Total Barang</div>
-                <div class="stat-value">{{ $totalBarang }}</div>
-                <div class="stat-footer">Data barang terdaftar</div>
-            </div>
-        </div>
-    </div>
+    @if($user->role == 'admin')
 
-    <div class="col-md-3">
-        <div class="card stat-card success">
-            <div class="card-body p-4">
-                <div class="stat-title">Total Stok</div>
-                <div class="stat-value">{{ $totalStok }}</div>
-                <div class="stat-footer">Akumulasi seluruh stok</div>
+        <div class="col-md-3">
+            <div class="card stat-card primary">
+                <div class="card-body p-4">
+                    <div class="stat-title">Total Part</div>
+                    <div class="stat-value">{{ $totalBarang }}</div>
+                    <div class="stat-footer">Data part terdaftar</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card stat-card warning">
-            <div class="card-body p-4">
-                <div class="stat-title">Pending Approval</div>
-                <div class="stat-value">{{ $pendingApproval }}</div>
-                <div class="stat-footer">Menunggu validasi atasan</div>
+        <div class="col-md-3">
+            <div class="card stat-card success">
+                <div class="card-body p-4">
+                    <div class="stat-title">Total Inventory</div>
+                    <div class="stat-value">{{ $totalStok }}</div>
+                    <div class="stat-footer">Akumulasi seluruh stok</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card stat-card info">
-            <div class="card-body p-4">
-                <div class="stat-title">Approved</div>
-                <div class="stat-value">{{ $approved }}</div>
-                <div class="stat-footer">Transaksi telah disetujui</div>
+        <div class="col-md-3">
+            <div class="card stat-card warning">
+                <div class="card-body p-4">
+                    <div class="stat-title">Pending Approval</div>
+                    <div class="stat-value">{{ $pendingApproval }}</div>
+                    <div class="stat-footer">Menunggu validasi atasan</div>
+                </div>
             </div>
         </div>
-    </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card info">
+                <div class="card-body p-4">
+                    <div class="stat-title">Supplier</div>
+                    <div class="stat-value">{{ $totalSupplier }}</div>
+                    <div class="stat-footer">Supplier terdaftar</div>
+                </div>
+            </div>
+        </div>
+
+    @else
+
+        <div class="col-md-3">
+            <div class="card stat-card warning">
+                <div class="card-body p-4">
+                    <div class="stat-title">Pending Approval</div>
+                    <div class="stat-value">{{ $pendingApproval }}</div>
+                    <div class="stat-footer">Transaksi perlu dicek</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card success">
+                <div class="card-body p-4">
+                    <div class="stat-title">Approved</div>
+                    <div class="stat-value">{{ $approved }}</div>
+                    <div class="stat-footer">Transaksi disetujui</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card primary">
+                <div class="card-body p-4">
+                    <div class="stat-title">Rejected</div>
+                    <div class="stat-value">{{ $rejected }}</div>
+                    <div class="stat-footer">Transaksi ditolak</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card info">
+                <div class="card-body p-4">
+                    <div class="stat-title">Total Transaksi</div>
+                    <div class="stat-value">{{ $approved + $rejected + $pendingApproval }}</div>
+                    <div class="stat-footer">Seluruh transaksi</div>
+                </div>
+            </div>
+        </div>
+
+    @endif
 
 </div>
 
@@ -220,6 +266,7 @@
     </div>
 </div>
 
+@if($user->role == 'admin')
 {{-- STOK MENIPIS & TRANSAKSI TERBARU --}}
 <div class="row mt-4">
 
@@ -344,6 +391,83 @@
     </div>
 
 </div>
+@endif
+
+@if($user->role == 'atasan')
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card clean-card">
+            <div class="card-header d-flex justify-content-between align-items-center p-4">
+                <div>
+                    <h5 class="section-title">Transaksi Menunggu Approval</h5>
+                    <span class="section-subtitle">
+                        Daftar transaksi yang perlu diperiksa oleh atasan
+                    </span>
+                </div>
+
+                <a href="/approval" class="btn btn-sm btn-outline-primary">
+                    Buka Approval
+                </a>
+            </div>
+
+            <div class="card-body p-4">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>PO Number</th>
+                            <th>Part</th>
+                            <th>Jenis</th>
+                            <th>Jumlah</th>
+                            <th>Dokumen</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @forelse($transaksiPending as $trx)
+                        <tr>
+                            <td>
+                                <strong>{{ $trx->po_number }}</strong>
+                            </td>
+
+                            <td>
+                                <strong>{{ $trx->barang->part_number }}</strong><br>
+                                <small class="text-muted">
+                                    {{ $trx->barang->nama_barang }}
+                                </small>
+                            </td>
+
+                            <td>
+                                @if($trx->jenis == 'masuk')
+                                    <span class="badge-soft-success">Masuk</span>
+                                @else
+                                    <span class="badge-soft-danger">Keluar</span>
+                                @endif
+                            </td>
+
+                            <td>{{ $trx->jumlah }}</td>
+
+                            <td>
+                                @if($trx->dokumen->count() > 0)
+                                    <span class="badge bg-success">Ada Dokumen</span>
+                                @else
+                                    <span class="badge bg-warning text-dark">Belum Upload</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                Tidak ada transaksi pending
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

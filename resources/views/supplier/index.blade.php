@@ -18,6 +18,20 @@
             </div>
         @endif
 
+        <form
+            action="/supplier"
+            method="GET"
+            class="mb-3"
+        >
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Cari supplier..."
+                value="{{ $search }}"
+            >
+        </form>
+
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>

@@ -128,3 +128,13 @@ body {
 .sidebar-logout .sidebar-link:hover span {
     color: #fff1f2 !important;
 }
+
+.footer {
+    font-size: 13px;
+    padding: 1rem 0;
+    color: #7c8aa5;
+}
+
+.footer strong {
+    color: #1f2d5a;
+}

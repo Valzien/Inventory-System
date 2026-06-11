@@ -12,9 +12,20 @@ class LaporanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Transaksi::with('barang', 'approval', 'dokumen');
+        $search = $request->search;
 
-        // filter tanggal
+        $query = Transaksi::with('barang', 'approval.user', 'dokumen');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('po_number', 'like', "%{$search}%")
+                  ->orWhereHas('barang', function ($b) use ($search) {
+                      $b->where('part_number', 'like', "%{$search}%")
+                        ->orWhere('nama_barang', 'like', "%{$search}%");
+                  });
+            });
+        }
+
         if ($request->tanggal_awal && $request->tanggal_akhir) {
             $query->whereBetween('tanggal', [
                 $request->tanggal_awal,
@@ -24,12 +35,24 @@ class LaporanController extends Controller
 
         $laporan = $query->latest()->get();
 
-        return view('laporan.index', compact('laporan'));
+        return view('laporan.index', compact('laporan', 'search'));
     }
 
     public function exportPDF(Request $request)
     {
-        $query = Transaksi::with('barang', 'approval', 'dokumen');
+        $search = $request->search;
+
+        $query = Transaksi::with('barang', 'approval.user', 'dokumen');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('po_number', 'like', "%{$search}%")
+                  ->orWhereHas('barang', function ($b) use ($search) {
+                      $b->where('part_number', 'like', "%{$search}%")
+                        ->orWhere('nama_barang', 'like', "%{$search}%");
+                  });
+            });
+        }
 
         if ($request->tanggal_awal && $request->tanggal_akhir) {
             $query->whereBetween('tanggal', [
@@ -52,5 +75,4 @@ class LaporanController extends Controller
             'laporan-transaksi.xlsx'
         );
     }
-
 }

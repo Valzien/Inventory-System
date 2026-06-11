@@ -7,11 +7,19 @@ use App\Models\Supplier;
 
 class SupplierController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $suppliers = Supplier::latest()->get();
+        $search = $request->search;
 
-        return view('supplier.index', compact('suppliers'));
+        $suppliers = Supplier::when($search, function ($query) use ($search) {
+            $query->where('nama_supplier', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('telepon', 'like', "%{$search}%");
+        })
+        ->latest()
+        ->get();
+
+        return view('supplier.index', compact('suppliers', 'search'));
     }
 
     public function create()

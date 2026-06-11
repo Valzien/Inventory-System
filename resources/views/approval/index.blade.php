@@ -14,12 +14,52 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        <form
+            action="/approval"
+            method="GET"
+            class="mb-4"
+        >
+            <div class="row">
+
+                <div class="col-md-12">
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Cari PO Number, Part Number atau Nama Part..."
+                        value="{{ $search ?? '' }}"
+                    >
+                </div>
+
+            </div>
+        </form>
+
+        <form
+            action="/supplier"
+            method="GET"
+            class="mb-3"
+        >
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Cari supplier..."
+                value="{{ $search }}"
+            >
+        </form>
+
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>Kode</th>
-                        <th>Barang</th>
+                        <th>PO Number</th>
+                        <th>Part</th>
                         <th>Jenis</th>
                         <th>Jumlah</th>
                         <th>Dokumen</th>
@@ -31,9 +71,16 @@
                 <tbody>
                     @foreach($transaksi as $item)
                     <tr>
-                        <td>{{ $item->po_number }}</td>
+                        <td>
+                            <strong>{{ $item->po_number }}</strong>
+                        </td>
 
-                        <td>{{ $item->barang->part_number }} - {{ $item->barang->nama_barang }}</td>
+                        <td>
+                            <strong>{{ $item->barang->part_number }}</strong><br>
+                            <small class="text-muted">
+                                {{ $item->barang->nama_barang }}
+                            </small>
+                        </td>
 
                         <td>
                             @if($item->jenis == 'masuk')
@@ -66,7 +113,6 @@
                                             {{ $doc->jenis_dokumen }}
                                         </option>
                                     @endforeach
-
                                 </select>
 
                             @else
@@ -93,7 +139,7 @@
                                     <div class="mt-2">
                                         <small>
                                             <strong>Catatan:</strong><br>
-                                            {{ $item->approval->catatan }}
+                                            {{ $item->approval->catatan ?? '-' }}
                                         </small>
                                     </div>
 
@@ -101,6 +147,18 @@
                                     <span class="badge bg-warning text-dark">
                                         Pending
                                     </span>
+                                @endif
+
+                                @if($item->approval->user)
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            Oleh: {{ $item->approval->user->name }}<br>
+                                            Pada:
+                                            {{ $item->approval->approved_at
+                                                ? \Carbon\Carbon::parse($item->approval->approved_at)->format('d M Y H:i')
+                                                : '-' }}
+                                        </small>
+                                    </div>
                                 @endif
 
                             @else
@@ -112,7 +170,6 @@
 
                         {{-- APPROVAL --}}
                         <td>
-
                             @if($item->dokumen->count() == 0)
 
                                 <span class="text-muted">
@@ -127,7 +184,6 @@
 
                             @else
 
-                                {{-- APPROVE --}}
                                 <div class="mb-2">
                                     <a
                                         href="/approval/{{ $item->id }}/approve"
@@ -138,7 +194,6 @@
                                     </a>
                                 </div>
 
-                                {{-- REJECT --}}
                                 <form
                                     action="/approval/{{ $item->id }}/reject"
                                     method="POST"
@@ -165,7 +220,6 @@
                                 </form>
 
                             @endif
-
                         </td>
                     </tr>
                     @endforeach
