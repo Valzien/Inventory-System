@@ -12,6 +12,32 @@
             Tambah Transaksi
         </a>
 
+                    <div class="mb-4">
+
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+
+                        <a href="/transaksi"
+                        class="btn {{ request('status') == '' ? 'btn-primary' : 'btn-light' }}">
+                            Semua
+                        </a>
+
+                        <a href="/transaksi?status=pending"
+                        class="btn {{ request('status') == 'pending' ? 'btn-warning' : 'btn-light' }}">
+                            Pending
+                        </a>
+
+                        <a href="/transaksi?status=approved"
+                        class="btn {{ request('status') == 'approved' ? 'btn-success' : 'btn-light' }}">
+                            Approved
+                        </a>
+
+                        <a href="/transaksi?status=rejected"
+                        class="btn {{ request('status') == 'rejected' ? 'btn-danger' : 'btn-light' }}">
+                            Rejected
+                        </a>
+
+                    </div>
+
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -38,6 +64,99 @@
                     <th width="200">Aksi</th>
                 </tr>
             </thead>
+
+                    <form method="GET" action="/transaksi">
+
+                        <input type="hidden"
+                            name="status"
+                            value="{{ request('status') }}">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <input
+                                    type="text"
+                                    name="search"
+                                    class="form-control"
+                                    placeholder="Cari PO Number, Part Number atau Nama Part..."
+                                    value="{{ request('search') }}"
+                                >
+                            </div>
+
+                            <div class="col-md-3">
+                                <select
+                                    name="jenis"
+                                    class="form-select"
+                                >
+                                    <option value="">
+                                        Semua Jenis
+                                    </option>
+
+                                    <option value="masuk"
+                                        {{ request('jenis') == 'masuk' ? 'selected' : '' }}>
+                                        Barang Masuk
+                                    </option>
+
+                                    <option value="keluar"
+                                        {{ request('jenis') == 'keluar' ? 'selected' : '' }}>
+                                        Barang Keluar
+                                    </option>
+
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <button class="btn btn-primary w-100">
+                                    Filter
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="row mb-3">
+
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <small class="text-muted">Total</small>
+                            <h5>{{ $totalTransaksi }}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <small class="text-muted">Pending</small>
+                            <h5>{{ $pendingCount }}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <small class="text-muted">Approved</small>
+                            <h5>{{ $approvedCount }}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <small class="text-muted">Rejected</small>
+                            <h5>{{ $rejectedCount }}</h5>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
             <tbody>
                 @foreach($transaksi as $item)
@@ -97,6 +216,10 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-end mt-3">
+            {{ $transaksi->links() }}
+        </div>
 
     </div>
 </div>

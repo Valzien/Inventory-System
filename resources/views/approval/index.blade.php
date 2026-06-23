@@ -20,38 +20,50 @@
             </div>
         @endif
 
-        <form
-            action="/approval"
-            method="GET"
-            class="mb-4"
-        >
-            <div class="row">
+        <form action="/approval" method="GET" class="mb-4">
 
-                <div class="col-md-12">
+            <div class="row g-2">
+
+                <div class="col-md-8">
                     <input
                         type="text"
                         name="search"
                         class="form-control"
                         placeholder="Cari PO Number, Part Number atau Nama Part..."
-                        value="{{ $search ?? '' }}"
+                        value="{{ request('search') }}"
                     >
                 </div>
 
-            </div>
-        </form>
+                <div class="col-md-2">
+                    <select name="status" class="form-select">
 
-        <form
-            action="/supplier"
-            method="GET"
-            class="mb-3"
-        >
-            <input
-                type="text"
-                name="search"
-                class="form-control"
-                placeholder="Cari supplier..."
-                value="{{ $search }}"
-            >
+                        <option value="">Semua</option>
+
+                        <option value="pending"
+                            {{ request('status') == 'pending' ? 'selected' : '' }}>
+                            Pending
+                        </option>
+
+                        <option value="approved"
+                            {{ request('status') == 'approved' ? 'selected' : '' }}>
+                            Approved
+                        </option>
+
+                        <option value="rejected"
+                            {{ request('status') == 'rejected' ? 'selected' : '' }}>
+                            Rejected
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100">
+                        Filter
+                    </button>
+                </div>
+            </div>
+
         </form>
 
         <div class="table-responsive">
@@ -173,7 +185,7 @@
                             @if($item->dokumen->count() == 0)
 
                                 <span class="text-muted">
-                                    Upload dokumen dulu
+                                    Dokumen Belum Diupload
                                 </span>
 
                             @elseif($item->approval && $item->approval->status == 'approved')
@@ -226,7 +238,15 @@
                 </tbody>
             </table>
         </div>
+        </table>
+        </div>
 
+        <div class="d-flex justify-content-end mt-3">
+            {{ $transaksi->links() }}
+        </div>
+
+        </div>
+        </div>
     </div>
 </div>
 @endsection

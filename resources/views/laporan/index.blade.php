@@ -9,115 +9,117 @@
     </p>
 </div>
 
-<form method="GET" action="/laporan">
+{{-- FILTER CARD --}}
+<div class="card mb-4">
+    <div class="card-body">
 
-    <div class="row g-3 mb-3">
+        <form method="GET" action="/laporan">
+            <div class="row g-3 align-items-end">
 
-        <div class="col-md-12">
-            <label class="form-label">Pencarian</label>
+                <div class="col-md-5">
+                    <label class="form-label">Pencarian</label>
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Cari PO Number, Part Number atau Nama Part..."
+                        value="{{ request('search') }}"
+                    >
+                </div>
 
-            <input
-                type="text"
-                name="search"
-                class="form-control"
-                placeholder="Cari PO Number, Part Number atau Nama Part..."
-                value="{{ request('search') }}"
-            >
-        </div>
+                <div class="col-md-2">
+                    <label class="form-label">Tanggal Awal</label>
+                    <input
+                        type="date"
+                        name="tanggal_awal"
+                        class="form-control"
+                        value="{{ request('tanggal_awal') }}"
+                    >
+                </div>
 
-        <div class="col-md-4">
-            <label class="form-label">Tanggal Awal</label>
-            <input
-                type="date"
-                name="tanggal_awal"
-                class="form-control"
-                value="{{ request('tanggal_awal') }}"
-            >
-        </div>
+                <div class="col-md-2">
+                    <label class="form-label">Tanggal Akhir</label>
+                    <input
+                        type="date"
+                        name="tanggal_akhir"
+                        class="form-control"
+                        value="{{ request('tanggal_akhir') }}"
+                    >
+                </div>
 
-        <div class="col-md-4">
-            <label class="form-label">Tanggal Akhir</label>
-            <input
-                type="date"
-                name="tanggal_akhir"
-                class="form-control"
-                value="{{ request('tanggal_akhir') }}"
-            >
-        </div>
 
-        <div class="col-md-4 d-flex align-items-end">
-            <button class="btn btn-primary w-100">
-                Filter & Cari
-            </button>
-        </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100">
+                        Filter & Cari
+                    </button>
+                </div>
 
-    </div>
+            </div>
+        </form>
 
-</form>
-
-        {{-- EXPORT BUTTON --}}
-        <div class="d-flex gap-2 mb-4">
+        <div class="d-flex flex-wrap gap-2 mt-3">
             <a
-                href="/laporan/pdf?tanggal_awal={{ request('tanggal_awal') }}&tanggal_akhir={{ request('tanggal_akhir') }}"
+                href="/laporan/pdf?search={{ request('search') }}&tanggal_awal={{ request('tanggal_awal') }}&tanggal_akhir={{ request('tanggal_akhir') }}"
                 class="btn btn-danger"
             >
                 Export PDF
             </a>
 
             <a
-            href="/laporan/pdf?search={{ request('search') }}&tanggal_awal={{ request('tanggal_awal') }}&tanggal_akhir={{ request('tanggal_akhir') }}"
-            class="btn btn-danger"
+                href="/laporan/excel?search={{ request('search') }}&tanggal_awal={{ request('tanggal_awal') }}&tanggal_akhir={{ request('tanggal_akhir') }}"
+                class="btn btn-success"
             >
-                Export PDF
+                Export Excel
             </a>
 
-            <a
-                href="/laporan"
-                class="btn btn-light"
-            >
+            <a href="/laporan" class="btn btn-light">
                 Reset Filter
             </a>
         </div>
 
-        {{-- SUMMARY --}}
-        <div class="row mb-4">
+    </div>
+</div>
 
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm mb-0">
-                    <div class="card-body">
-                        <small class="text-muted">Total Data</small>
-                        <h4 class="fw-bold mb-0">
-                            {{ $laporan->count() }}
-                        </h4>
-                    </div>
-                </div>
+{{-- SUMMARY --}}
+<div class="row g-3 mb-4">
+
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm mb-0">
+            <div class="card-body">
+                <small class="text-muted">Total Data</small>
+                <h4 class="fw-bold mb-0">{{ $laporan->total() }}</h4>
             </div>
-
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm mb-0">
-                    <div class="card-body">
-                        <small class="text-muted">Barang Masuk</small>
-                        <h4 class="fw-bold text-success mb-0">
-                            {{ $laporan->where('jenis', 'masuk')->count() }}
-                        </h4>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm mb-0">
-                    <div class="card-body">
-                        <small class="text-muted">Barang Keluar</small>
-                        <h4 class="fw-bold text-danger mb-0">
-                            {{ $laporan->where('jenis', 'keluar')->count() }}
-                        </h4>
-                    </div>
-                </div>
-            </div>
-
         </div>
+    </div>
 
-        {{-- TABLE --}}
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm mb-0">
+            <div class="card-body">
+                <small class="text-muted">Barang Masuk</small>
+                <h4 class="fw-bold text-success mb-0">
+                    {{ $laporan->where('jenis', 'masuk')->count() }}
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm mb-0">
+            <div class="card-body">
+                <small class="text-muted">Barang Keluar</small>
+                <h4 class="fw-bold text-danger mb-0">
+                    {{ $laporan->where('jenis', 'keluar')->count() }}
+                </h4>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{{-- TABLE CARD --}}
+<div class="card">
+    <div class="card-body">
+
         <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
                 <thead>
@@ -149,13 +151,9 @@
 
                         <td>
                             @if($item->jenis == 'masuk')
-                                <span class="badge bg-success">
-                                    Masuk
-                                </span>
+                                <span class="badge bg-success">Masuk</span>
                             @else
-                                <span class="badge bg-danger">
-                                    Keluar
-                                </span>
+                                <span class="badge bg-danger">Keluar</span>
                             @endif
                         </td>
 
@@ -165,14 +163,11 @@
 
                         <td>
                             @if($item->dokumen->count() > 0)
-
                                 <select
                                     class="form-select form-select-sm"
                                     onchange="if(this.value) window.open(this.value, '_blank')"
                                 >
-                                    <option value="">
-                                        Lihat Dokumen
-                                    </option>
+                                    <option value="">Lihat Dokumen</option>
 
                                     @foreach($item->dokumen as $doc)
                                         <option value="/{{ $doc->file_path }}">
@@ -180,35 +175,22 @@
                                         </option>
                                     @endforeach
                                 </select>
-
                             @else
-                                <span class="badge bg-warning text-dark">
-                                    Tidak Ada
-                                </span>
+                                <span class="badge bg-warning text-dark">Tidak Ada</span>
                             @endif
                         </td>
 
                         <td>
                             @if($item->approval)
-
                                 @if($item->approval->status == 'approved')
-                                    <span class="badge bg-success">
-                                        Approved
-                                    </span>
+                                    <span class="badge bg-success">Approved</span>
                                 @elseif($item->approval->status == 'rejected')
-                                    <span class="badge bg-danger">
-                                        Rejected
-                                    </span>
+                                    <span class="badge bg-danger">Rejected</span>
                                 @else
-                                    <span class="badge bg-warning text-dark">
-                                        Pending
-                                    </span>
+                                    <span class="badge bg-warning text-dark">Pending</span>
                                 @endif
-
                             @else
-                                <span class="badge bg-secondary">
-                                    Belum Diproses
-                                </span>
+                                <span class="badge bg-secondary">Belum Diproses</span>
                             @endif
                         </td>
 
@@ -234,7 +216,9 @@
                 </tbody>
             </table>
         </div>
-
+        <div class="d-flex justify-content-end mt-3">
+    {{ $laporan->links() }}
+</div>
     </div>
 </div>
 

@@ -67,7 +67,9 @@
             </tbody>
         </table>
 
-        {{ $barang->links() }}
+<div class="d-flex justify-content-end mt-3">
+    {{ $barang->links() }}
+</div>
 
     </div>
 </div>

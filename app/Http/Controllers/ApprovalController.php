@@ -11,27 +11,65 @@ class ApprovalController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
+        $status = $request->status;
 
-        $transaksi = Transaksi::with(
+        $query = Transaksi::with(
             'barang',
             'dokumen',
             'approval.user'
-        )
-        ->when($search, function ($query) use ($search) {
+        );
 
-            $query->where('po_number', 'like', "%{$search}%")
+        if ($search) {
 
-                ->orWhereHas('barang', function ($q) use ($search) {
-                    $q->where('part_number', 'like', "%{$search}%")
-                    ->orWhere('nama_barang', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+
+                $q->where('po_number', 'like', "%{$search}%")
+                    ->orWhereHas('barang', function ($b) use ($search) {
+
+                        $b->where('part_number', 'like', "%{$search}%")
+                        ->orWhere('nama_barang', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        if ($status == 'approved') {
+
+            $query->whereHas('approval', function ($q) {
+                $q->where('status', 'approved');
+            });
+        }
+
+        if ($status == 'rejected') {
+
+            $query->whereHas('approval', function ($q) {
+                $q->where('status', 'rejected');
+            });
+        }
+
+        if ($status == 'pending') {
+
+            $query->where(function ($q) {
+
+                $q->doesntHave('approval')
+                ->orWhereHas('approval', function ($a) {
+                    $a->where('status', 'pending');
                 });
-        })
-        ->latest()
-        ->get();
+
+            });
+        }
+
+        $transaksi = $query
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         return view(
             'approval.index',
-            compact('transaksi', 'search')
+            compact(
+                'transaksi',
+                'search',
+                'status'
+            )
         );
     }
 

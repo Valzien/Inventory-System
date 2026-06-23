@@ -138,3 +138,17 @@ body {
 .footer strong {
     color: #1f2d5a;
 }
+
+.pagination {
+    margin-bottom: 0;
+}
+
+.pagination .page-link {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.pagination .page-item.active .page-link {
+    background: #435ebe;
+    border-color: #435ebe;
+}
