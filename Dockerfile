@@ -32,6 +32,10 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
+RUN php artisan config:clear || true
+RUN php artisan route:clear || true
+RUN php artisan view:clear || true
+
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
