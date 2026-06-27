@@ -61,11 +61,6 @@
                         </button>
                     </form>
 
-                    <div class="mt-4 text-muted small">
-                        <div>Admin: admin@gmail.com / 12345678</div>
-                        <div>Atasan: atasan@gmail.com / 12345678</div>
-                    </div>
-
                 </div>
             </div>
 
