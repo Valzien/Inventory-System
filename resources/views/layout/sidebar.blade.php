@@ -84,13 +84,6 @@
 
                     <li class="sidebar-title">Manajemen</li>
 
-                    <li class="sidebar-item {{ request()->is('direktur/dashboard') ? 'active' : '' }}">
-                        <a href="/direktur/dashboard" class="sidebar-link">
-                            <i class="bi bi-speedometer2"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-
                     <li class="sidebar-item {{ request()->is('direktur/user-management*') ? 'active' : '' }}">
                         <a href="/direktur/user-management" class="sidebar-link">
                             <i class="bi bi-people"></i>

@@ -82,8 +82,6 @@ Route::middleware(['auth','role:manpurchase,direktur'])->group(function () {
 
 Route::middleware(['auth','role:direktur'])->prefix('direktur')->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-
     Route::get('/user-management', [UserManagementController::class, 'index']);
     Route::get('/user-management/create', [UserManagementController::class, 'create']);
     Route::post('/user-management/store', [UserManagementController::class, 'store']);
