@@ -23,12 +23,23 @@ class UserSeeder extends Seeder
 
         User::updateOrCreate(
             [
-                'email' => 'atasan@gmail.com'
+                'email' => 'manpurchase@gmail.com'
             ],
             [
-                'name' => 'Atasan',
+                'name' => 'Manager Purchasing',
                 'password' => Hash::make('12345678'),
-                'role' => 'atasan'
+                'role' => 'manpurchase'
+            ]
+        );
+
+        User::updateOrCreate(
+            [
+                'email' => 'direktur@gmail.com'
+            ],
+            [
+                'name' => 'Direktur',
+                'password' => Hash::make('12345678'),
+                'role' => 'direktur'
             ]
         );
     }

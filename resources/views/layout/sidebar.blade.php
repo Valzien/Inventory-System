@@ -56,8 +56,8 @@
 
                 @endif
 
-                {{-- ATASAN MENU --}}
-                @if(auth()->user()->role == 'atasan')
+                {{-- MANPURCHASE MENU --}}
+                @if(auth()->user()->role == 'manpurchase')
 
                     <li class="sidebar-title">Approval</li>
 
@@ -69,6 +69,41 @@
                     </li>
 
                     <li class="sidebar-title">Laporan</li>
+
+                    <li class="sidebar-item {{ request()->is('laporan*') ? 'active' : '' }}">
+                        <a href="/laporan" class="sidebar-link">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <span>Laporan</span>
+                        </a>
+                    </li>
+
+                @endif
+
+                {{-- DIREKTUR MENU --}}
+                @if(auth()->user()->role == 'direktur')
+
+                    <li class="sidebar-title">Manajemen</li>
+
+                    <li class="sidebar-item {{ request()->is('direktur/dashboard') ? 'active' : '' }}">
+                        <a href="/direktur/dashboard" class="sidebar-link">
+                            <i class="bi bi-speedometer2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->is('direktur/user-management*') ? 'active' : '' }}">
+                        <a href="/direktur/user-management" class="sidebar-link">
+                            <i class="bi bi-people"></i>
+                            <span>Manajemen User</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item {{ request()->is('approval*') ? 'active' : '' }}">
+                        <a href="/approval" class="sidebar-link">
+                            <i class="bi bi-check-circle"></i>
+                            <span>Approval</span>
+                        </a>
+                    </li>
 
                     <li class="sidebar-item {{ request()->is('laporan*') ? 'active' : '' }}">
                         <a href="/laporan" class="sidebar-link">

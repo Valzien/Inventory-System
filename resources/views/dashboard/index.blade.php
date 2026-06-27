@@ -185,7 +185,7 @@
                 <div class="card-body p-4">
                     <div class="stat-title">Pending Approval</div>
                     <div class="stat-value">{{ $pendingApproval }}</div>
-                    <div class="stat-footer">Menunggu validasi atasan</div>
+                    <div class="stat-footer">Menunggu validasi</div>
                 </div>
             </div>
         </div>
@@ -393,7 +393,7 @@
 </div>
 @endif
 
-@if($user->role == 'atasan')
+@if($user->role == 'manpurchase' || $user->role == 'direktur')
 <div class="row mt-4">
     <div class="col-12">
         <div class="card clean-card">

@@ -21,10 +21,10 @@ class DemoDataSeeder extends Seeder
         |--------------------------------------------------------------------------
         */
 
-        $atasan = User::where('role', 'atasan')->first();
+        $atasan = User::where('role', 'manpurchase')->first();
 
         if (!$atasan) {
-            $this->command->error('User dengan role atasan belum ada. Jalankan UserSeeder dulu.');
+            $this->command->error('User dengan role manpurchase belum ada. Jalankan UserSeeder dulu.');
             return;
         }
 
