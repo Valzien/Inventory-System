@@ -30,7 +30,8 @@ WORKDIR /var/www/html
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist || \
+    composer install --no-dev --optimize-autoloader --no-interaction --prefer-source
 
 RUN php artisan config:clear || true
 RUN php artisan route:clear || true
